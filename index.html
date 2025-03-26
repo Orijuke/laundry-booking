@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Расписание стирок — ул. Седова, 91к6</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <header>
@@ -30,28 +31,39 @@
     </div>
   </main>
 
-<div id="booking-modal" class="modal hidden">
-  <div class="modal-content">
-    <p>Забронировать <span id="modal-time"></span> (<span id="modal-machine"></span>)?</p>
-    <div class="button-group">
-      <button id="confirm-booking" class="button-54">Подтвердить</button>
-      <button id="cancel-booking" class="button-54">Отмена</button>
+  <!-- Модальное окно бронирования -->
+  <div id="booking-modal" class="modal hidden">
+    <div class="modal-content">
+      <p>Забронировать <span id="modal-time"></span> (<span id="modal-machine"></span>)?</p>
+      <div class="button-group">
+        <button id="confirm-booking" class="button-54">Подтвердить</button>
+        <button id="cancel-booking" class="button-54">Отмена</button>
+      </div>
     </div>
   </div>
-</div>
 
-<div id="cancel-modal" class="modal hidden">
-  <div class="modal-content">
-    <p>Отменить бронь на <span id="cancel-modal-time"></span> (<span id="cancel-modal-machine"></span>)?</p>
-    <div class="button-group">
-      <button id="confirm-cancel" class="button-54">Да, отменить</button>
-      <button id="deny-cancel" class="button-54">Нет</button>
+  <!-- Модальное окно отмены брони -->
+  <div id="cancel-modal" class="modal hidden">
+    <div class="modal-content">
+      <p>Отменить бронь на <span id="cancel-modal-time"></span> (<span id="cancel-modal-machine"></span>)?</p>
+      <div class="button-group">
+        <button id="confirm-cancel" class="button-54">Подтвердить отмену</button>
+        <button id="deny-cancel" class="button-54">Не отменять</button>
+      </div>
     </div>
   </div>
-</div>
 
   <script src="js/storage.js"></script>
   <script src="js/schedule.js"></script>
   <script src="js/app.js"></script>
+
+  <script>
+    // Инициализация текущей даты в заголовке
+    document.addEventListener('DOMContentLoaded', function() {
+      const today = new Date();
+      const options = { day: 'numeric', month: 'long', weekday: 'long' };
+      document.getElementById('current-date').textContent = today.toLocaleDateString('ru-RU', options);
+    });
+  </script>
 </body>
 </html>

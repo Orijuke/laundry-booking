@@ -111,3 +111,36 @@ function generateSchedule(date) {
     tbody.appendChild(row);
   });
 }
+
+// Модальное окно бронирования
+let selectedSlot = null;
+
+document.querySelectorAll('#schedule-table .bookable').forEach(cell => {
+  cell.addEventListener('click', () => {
+    selectedSlot = {
+      time: cell.dataset.time,
+      machine: cell.dataset.machine
+    };
+    
+    document.getElementById('modal-time').textContent = selectedSlot.time;
+    document.getElementById('modal-machine').textContent = selectedSlot.machine;
+    document.getElementById('booking-modal').classList.remove('hidden');
+  });
+});
+
+document.getElementById('confirm-booking').addEventListener('click', () => {
+  if (selectedSlot) {
+    const date = document.getElementById('date-picker').value;
+    const profile = storage.getProfiles()[0];
+    
+    storage.bookSlot(
+      date,
+      selectedSlot.time,
+      selectedSlot.machine,
+      profile.id
+    );
+    
+    document.getElementById('booking-modal').classList.add('hidden');
+    generateSchedule(date);
+  }
+});

@@ -9,6 +9,8 @@ class ScheduleService {
     ];
     this.machines = ['У стены', 'У двери'];
     this.storage = storage;
+    this.selectedSlot = null;
+    this.cancelSlot = null;
   }
 
   initSchedule() {
@@ -16,6 +18,7 @@ class ScheduleService {
     const currentDate = new Date().toISOString().split('T')[0];
     datePicker.value = currentDate;
     datePicker.min = currentDate;
+    document.getElementById('current-date').textContent = this.formatDisplayDate(currentDate);
     this.renderSchedule(currentDate);
   }
 
@@ -43,7 +46,7 @@ class ScheduleService {
         const booking = bookings[timeSlot] && bookings[timeSlot][machine];
         
         if (booking) {
-          cell.textContent = `${booking.userName} | ${booking.room}`;
+          cell.textContent = `${booking.userName} (к.${booking.room})`;
           cell.style.backgroundColor = booking.color;
           cell.classList.add('booked');
           
@@ -64,42 +67,21 @@ class ScheduleService {
     });
   }
 
- handleSlotClick(timeSlot, machine) {
-  const currentUser = this.storage.getUser();
-  if (!currentUser) {
-    if (confirm('Для бронирования нужно создать профиль. Перейти к настройкам?')) {
-      window.location.href = 'profile.html';
+  handleSlotClick(timeSlot, machine) {
+    const currentUser = this.storage.getUser();
+    if (!currentUser) {
+      if (confirm('Для бронирования нужно создать профиль. Перейти к настройкам?')) {
+        window.location.href = 'profile.html';
+      }
+      return;
     }
-    return;
+    
+    document.getElementById('modal-time').textContent = timeSlot;
+    document.getElementById('modal-machine').textContent = machine;
+    document.getElementById('booking-modal').classList.add('visible');
+    
+    this.selectedSlot = { timeSlot, machine };
   }
-  
-  document.getElementById('modal-time').textContent = timeSlot;
-  document.getElementById('modal-machine').textContent = machine;
-  document.getElementById('booking-modal').classList.add('visible');
-  
-  this.selectedSlot = { timeSlot, machine };
-}
-
-handleCancelBooking(date, timeSlot, machine) {
-  document.getElementById('cancel-modal-time').textContent = timeSlot;
-  document.getElementById('cancel-modal-machine').textContent = machine;
-  document.getElementById('cancel-modal').classList.add('visible');
-  
-  // Сохраняем данные о выбранном слоте для отмены
-  this.cancelSlot = { date, timeSlot, machine };
-}
-
-handleConfirmCancel() {
-  if (!this.cancelSlot) return;
-  
-  const { date, timeSlot, machine } = this.cancelSlot;
-  if (this.storage.cancelBooking(date, timeSlot, machine)) {
-    this.renderSchedule(date);
-  }
-  
-  document.getElementById('cancel-modal').classList.remove('visible');
-  this.cancelSlot = null;
-}
 
   handleConfirmBooking(date) {
     if (!this.selectedSlot) return;
@@ -116,11 +98,23 @@ handleConfirmCancel() {
   }
 
   handleCancelBooking(date, timeSlot, machine) {
-    if (confirm('Вы действительно хотите отменить бронирование?')) {
-      if (this.storage.cancelBooking(date, timeSlot, machine)) {
-        this.renderSchedule(date);
-      }
+    document.getElementById('cancel-modal-time').textContent = timeSlot;
+    document.getElementById('cancel-modal-machine').textContent = machine;
+    document.getElementById('cancel-modal').classList.add('visible');
+    
+    this.cancelSlot = { date, timeSlot, machine };
+  }
+
+  handleConfirmCancel() {
+    if (!this.cancelSlot) return;
+    
+    const { date, timeSlot, machine } = this.cancelSlot;
+    if (this.storage.cancelBooking(date, timeSlot, machine)) {
+      this.renderSchedule(date);
     }
+    
+    document.getElementById('cancel-modal').classList.remove('visible');
+    this.cancelSlot = null;
   }
 
   formatDisplayDate(dateStr) {

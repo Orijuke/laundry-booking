@@ -26,3 +26,31 @@ function displayProfile() {
     `;
   }
 }
+
+// === Хранилище данных === //
+const storage = {
+  // Получить все профили
+  getProfiles() {
+    return JSON.parse(localStorage.getItem('laundryProfiles')) || [];
+  },
+
+  // Добавить/обновить профиль
+  saveProfile(profile) {
+    const profiles = this.getProfiles();
+    const existing = profiles.find(p => p.id === profile.id);
+    if (existing) {
+      Object.assign(existing, profile); // Обновляем
+    } else {
+      profile.id = Date.now().toString(); // Генерируем ID
+      profiles.push(profile);
+    }
+    localStorage.setItem('laundryProfiles', JSON.stringify(profiles));
+    return profile;
+  },
+
+  // Получить расписание
+  getSchedule() {
+    return JSON.parse(localStorage.getItem('laundrySchedule')) || [];
+  },
+
+  // Забронировать окно

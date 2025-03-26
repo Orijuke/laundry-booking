@@ -4,24 +4,42 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Настройки профиля</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/profile.css">
 </head>
 <body>
   <div class="profile-container">
     <h1>Настройки профиля</h1>
+    
     <form id="profile-form">
-      <label for="name">Ваше имя:</label>
-      <input type="text" id="name" required maxlength="20">
+      <div class="form-group">
+        <label for="name">Ваше имя:</label>
+        <input type="text" id="name" required 
+               minlength="2" maxlength="20"
+               pattern="[а-яА-ЯёЁa-zA-Z\s]+"
+               title="Только буквы и пробелы">
+        <div class="hint">От 2 до 20 буквенных символов</div>
+      </div>
       
-      <label for="room">Номер комнаты (1-12):</label>
-      <input type="number" id="room" min="1" max="12" required>
+      <div class="form-group">
+        <label for="room">Номер комнаты:</label>
+        <input type="number" id="room" required
+               min="1" max="12"
+               title="Номер комнаты от 1 до 12">
+      </div>
       
-      <label for="color">Ваш цвет в расписании:</label>
-      <input type="color" id="color" value="#5e9c76">
+      <div class="form-group">
+        <label for="color">Ваш цвет в расписании:</label>
+        <input type="color" id="color" value="#5e9c76">
+      </div>
       
-      <button type="submit">Сохранить</button>
+      <div class="form-actions">
+        <button type="submit" class="btn-primary">Сохранить</button>
+        <button type="button" id="delete-profile-btn" class="btn-danger">Удалить профиль</button>
+      </div>
     </form>
   </div>
-  <script src="script.js"></script>
+
+  <script type="module" src="assets/js/profile.js"></script>
 </body>
 </html>

@@ -1,74 +1,64 @@
-document.addEventListener('DOMContentLoaded', () => {
-  // Common elements
+document.addEventListener('DOMContentLoaded', function() {
   const currentUser = storage.getUser();
   
-  // Index page logic
+  // Главная страница
   if (document.getElementById('schedule-table')) {
     const datePicker = document.getElementById('date-picker');
     const currentDateEl = document.getElementById('current-date');
     const profileBtn = document.getElementById('profile-btn');
     const tableBody = document.querySelector('#schedule-table tbody');
-    const bookingModal = document.getElementById('booking-modal');
-    const confirmBookingBtn = document.getElementById('confirm-booking');
-    const cancelBookingBtn = document.getElementById('cancel-booking');
     
-    // Initialize date
+    // Инициализация даты
     const today = new Date();
     const currentDate = today.toISOString().split('T')[0];
     datePicker.value = currentDate;
     datePicker.min = currentDate;
     currentDateEl.textContent = schedule.formatDisplayDate(today);
     
-    // Initialize profile button
-    if (currentUser) {
-      profileBtn.textContent = `👤 ${currentUser.name} (к.${currentUser.room})`;
-      profileBtn.addEventListener('click', () => {
-        window.location.href = 'profile.html';
-      });
-    } else {
-      profileBtn.textContent = '👤 Создать профиль';
-      profileBtn.addEventListener('click', () => {
-        window.location.href = 'profile.html';
-      });
+    // Инициализация кнопки профиля
+    if (profileBtn) {
+      if (currentUser) {
+        profileBtn.textContent = `👤 ${currentUser.name} (к.${currentUser.room})`;
+      } else {
+        profileBtn.textContent = '👤 Создать профиль';
+      }
       
-      setTimeout(() => {
-        alert('Пожалуйста, создайте профиль для бронирования');
+      profileBtn.addEventListener('click', function() {
         window.location.href = 'profile.html';
-      }, 500);
+      });
     }
     
-    // Render initial schedule
+    // Инициализация расписания
     schedule.renderSchedule(currentDate, tableBody);
     
-    // Event listeners
-    datePicker.addEventListener('change', (e) => {
+    // Обработчики событий
+    datePicker.addEventListener('change', function(e) {
       const selectedDate = e.target.value;
       const date = new Date(selectedDate);
       currentDateEl.textContent = schedule.formatDisplayDate(date);
       schedule.renderSchedule(selectedDate, tableBody);
     });
     
-    confirmBookingBtn.addEventListener('click', () => {
+    document.getElementById('confirm-booking')?.addEventListener('click', function() {
       schedule.handleConfirmBooking(datePicker.value);
     });
     
-    cancelBookingBtn.addEventListener('click', () => {
-      bookingModal.classList.remove('visible');
+    document.getElementById('cancel-booking')?.addEventListener('click', function() {
+      document.getElementById('booking-modal').classList.remove('visible');
     });
   }
   
-  // Profile page logic
+  // Страница профиля
   if (document.getElementById('profile-form')) {
     const profileForm = document.getElementById('profile-form');
     
-    // Redirect if user exists (for demo purposes)
     if (currentUser) {
       document.getElementById('name').value = currentUser.name;
       document.getElementById('room').value = currentUser.room;
       document.getElementById('color').value = currentUser.color;
     }
     
-    profileForm.addEventListener('submit', (e) => {
+    profileForm.addEventListener('submit', function(e) {
       e.preventDefault();
       
       const user = {
@@ -82,7 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
       
-      // Save user and redirect
       storage.saveUser(user);
       window.location.href = 'index.html';
     });

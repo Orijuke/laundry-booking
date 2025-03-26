@@ -98,3 +98,38 @@ header {
     padding: 15px;
   }
 }
+
+/* Стили для ячеек */
+td {
+  cursor: pointer;
+  height: 60px;
+  position: relative;
+}
+
+.available {
+  background-color: #e8f5e9;
+}
+
+.available:hover {
+  background-color: #c8e6c9;
+}
+
+.booked {
+  background-color: #ffebee;
+}
+
+.time-slot {
+  color: #666;
+  font-style: italic;
+}
+
+.booking-info {
+  font-weight: bold;
+  margin-bottom: 3px;
+}
+
+.cancel-hint {
+  font-size: 0.8em;
+  color: #666;
+  font-style: italic;
+}

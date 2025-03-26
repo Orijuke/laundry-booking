@@ -65,3 +65,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
+
+// В конец файла добавляем:
+document.getElementById('confirm-cancel')?.addEventListener('click', function() {
+  schedule.handleConfirmCancel();
+});
+
+document.getElementById('deny-cancel')?.addEventListener('click', function() {
+  document.getElementById('cancel-modal').classList.remove('visible');
+});

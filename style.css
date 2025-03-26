@@ -51,6 +51,24 @@ main {
   margin: 0 auto;
 }
 
+#confirm-cancel {
+  background-color: #e74c3c;
+  color: white;
+}
+
+#confirm-cancel:hover {
+  background-color: #c0392b;
+}
+
+#deny-cancel {
+  background-color: #3498db;
+  color: white;
+}
+
+#deny-cancel:hover {
+  background-color: #2980b9;
+}
+
 /* Контейнер таблицы */
 .table-container {
   overflow-x: auto;

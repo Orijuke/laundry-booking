@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Инициализация кнопки профиля
     if (profileBtn) {
       if (currentUser) {
-        profileBtn.textContent = `👤 ${currentUser.name} (к.${currentUser.room})`;
+        profileBtn.textContent = `👤 ${currentUser.name} | ${currentUser.room}`;
       }
       
       profileBtn.addEventListener('click', function() {

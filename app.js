@@ -1,67 +1,86 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const storage = new StorageManager();
-    const schedule = new ScheduleManager();
+  // Common elements
+  const currentUser = storage.getUser();
+  
+  // Index page logic
+  if (document.getElementById('schedule-table')) {
+    const datePicker = document.getElementById('date-picker');
+    const currentDateEl = document.getElementById('current-date');
+    const profileBtn = document.getElementById('profile-btn');
+    const tableBody = document.querySelector('#schedule-table tbody');
+    const bookingModal = document.getElementById('booking-modal');
+    const confirmBookingBtn = document.getElementById('confirm-booking');
+    const cancelBookingBtn = document.getElementById('cancel-booking');
     
-    // Проверяем, есть ли текущий пользователь
-    const currentUser = storage.getCurrentUser();
-    if (!currentUser && window.location.pathname.endsWith('index.html')) {
+    // Initialize date
+    const today = new Date();
+    const currentDate = today.toISOString().split('T')[0];
+    datePicker.value = currentDate;
+    datePicker.min = currentDate;
+    currentDateEl.textContent = schedule.formatDisplayDate(today);
+    
+    // Initialize profile button
+    if (currentUser) {
+      profileBtn.textContent = `👤 ${currentUser.name}`;
+    } else {
+      setTimeout(() => {
+        alert('Пожалуйста, создайте профиль для бронирования');
         window.location.href = 'profile.html';
+      }, 500);
     }
     
-    // Инициализация главной страницы
-    if (document.getElementById('scheduleTable')) {
-        // Устанавливаем текущую дату по умолчанию
-        const datePicker = document.getElementById('datePicker');
-        const today = new Date().toISOString().split('T')[0];
-        datePicker.value = today;
-        datePicker.min = today; // Запрещаем выбирать прошедшие даты
-        
-        // Обновляем расписание при изменении даты
-        datePicker.addEventListener('change', () => {
-            schedule.renderSchedule(datePicker.value);
-        });
-        
-        // Отображаем имя пользователя
-        if (currentUser) {
-            document.getElementById('userNameDisplay').textContent = currentUser.name;
-        }
-        
-        // Переход к профилю
-        document.getElementById('profileButton').addEventListener('click', () => {
-            window.location.href = 'profile.html';
-        });
-        
-        // Первоначальная загрузка расписания
-        schedule.renderSchedule(datePicker.value);
+    // Render initial schedule
+    schedule.renderSchedule(currentDate, tableBody);
+    
+    // Event listeners
+    datePicker.addEventListener('change', (e) => {
+      const selectedDate = e.target.value;
+      const date = new Date(selectedDate);
+      currentDateEl.textContent = schedule.formatDisplayDate(date);
+      schedule.renderSchedule(selectedDate, tableBody);
+    });
+    
+    profileBtn.addEventListener('click', () => {
+      window.location.href = 'profile.html';
+    });
+    
+    confirmBookingBtn.addEventListener('click', () => {
+      schedule.handleConfirmBooking(datePicker.value);
+    });
+    
+    cancelBookingBtn.addEventListener('click', () => {
+      bookingModal.classList.remove('visible');
+    });
+  }
+  
+  // Profile page logic
+  if (document.getElementById('profile-form')) {
+    const profileForm = document.getElementById('profile-form');
+    
+    // Fill form if user exists
+    if (currentUser) {
+      document.getElementById('name').value = currentUser.name;
+      document.getElementById('room').value = currentUser.room;
+      document.getElementById('color').value = currentUser.color;
     }
     
-    // Инициализация страницы профиля
-    if (document.getElementById('profileForm')) {
-        const form = document.getElementById('profileForm');
-        const user = storage.getCurrentUser();
-        
-        // Заполняем форму, если пользователь уже существует
-        if (user) {
-            document.getElementById('name').value = user.name;
-            document.getElementById('room').value = user.room;
-            document.getElementById('color').value = user.color;
-        }
-        
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const newUser = {
-                id: user ? user.id : storage.generateId(),
-                name: document.getElementById('name').value,
-                room: parseInt(document.getElementById('room').value),
-                color: document.getElementById('color').value
-            };
-            
-            storage.saveUser(newUser);
-            storage.setCurrentUser(newUser);
-            
-            // Перенаправляем на главную страницу
-            window.location.href = 'index.html';
-        });
-    }
+    profileForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const user = {
+        name: document.getElementById('name').value.trim(),
+        room: document.getElementById('room').value,
+        color: document.getElementById('color').value
+      };
+      
+      if (!user.name || !user.room) {
+        alert('Пожалуйста, заполните все поля');
+        return;
+      }
+      
+      // Save user and redirect
+      storage.saveUser(user);
+      window.location.href = 'index.html';
+    });
+  }
 });

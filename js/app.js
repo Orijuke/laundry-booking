@@ -20,14 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
     currentDateEl.textContent = schedule.formatDisplayDate(today);
     
     // Initialize profile button
-    const profileBtn = document.getElementById('profile-btn');
-    if (profileBtn) {
-      if (currentUser) {
-        profileBtn.textContent = `👤 ${currentUser.name} (к.${currentUser.room})`;
-      } else {
-        profileBtn.textContent = '👤 Создать профиль';
-      }
-      
     if (currentUser) {
       profileBtn.textContent = `👤 ${currentUser.name} (к.${currentUser.room})`;
       profileBtn.addEventListener('click', () => {

@@ -1,16 +1,9 @@
 class StorageService {
-
-  // Добавим в класс StorageService
-  isUserExists() {
-    return !!localStorage.getItem(this.USER_KEY);
-  }
-  
   constructor() {
     this.USER_KEY = 'laundryUser';
     this.BOOKINGS_KEY = 'laundryBookings';
   }
 
-  // User methods
   getUser() {
     const userData = localStorage.getItem(this.USER_KEY);
     return userData ? JSON.parse(userData) : null;
@@ -24,7 +17,6 @@ class StorageService {
     return user;
   }
 
-  // Bookings methods
   getBookings() {
     const bookingsData = localStorage.getItem(this.BOOKINGS_KEY);
     return bookingsData ? JSON.parse(bookingsData) : {};
@@ -67,7 +59,6 @@ class StorageService {
     return false;
   }
 
-  // Helper
   generateId() {
     return Math.random().toString(36).substr(2, 9);
   }

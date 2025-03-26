@@ -3,22 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Профиль</title>
+  <title>Настройки профиля</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>Создание профиля</h1>
-  </header>
-  <main>
+  <div class="profile-container">
+    <h1>Настройки профиля</h1>
     <form id="profile-form">
       <label for="name">Ваше имя:</label>
-      <input type="text" id="name" required>
-      <label for="room">Номер комнаты:</label>
-      <input type="text" id="room" required>
+      <input type="text" id="name" required maxlength="20">
+      
+      <label for="room">Номер комнаты (1-12):</label>
+      <input type="number" id="room" min="1" max="12" required>
+      
+      <label for="color">Ваш цвет в расписании:</label>
+      <input type="color" id="color" value="#5e9c76">
+      
       <button type="submit">Сохранить</button>
     </form>
-  </main>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>

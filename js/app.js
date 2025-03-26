@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
     currentDateEl.textContent = schedule.formatDisplayDate(today);
     
     // Initialize profile button
-    // В секции Index page logic заменим инициализацию кнопки профиля
     if (currentUser) {
       profileBtn.textContent = `👤 ${currentUser.name} (к.${currentUser.room})`;
       profileBtn.addEventListener('click', () => {
@@ -31,6 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
       profileBtn.addEventListener('click', () => {
         window.location.href = 'profile.html';
       });
+      
+      setTimeout(() => {
+        alert('Пожалуйста, создайте профиль для бронирования');
+        window.location.href = 'profile.html';
+      }, 500);
     }
     
     // Render initial schedule
@@ -42,10 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const date = new Date(selectedDate);
       currentDateEl.textContent = schedule.formatDisplayDate(date);
       schedule.renderSchedule(selectedDate, tableBody);
-    });
-    
-    profileBtn.addEventListener('click', () => {
-      window.location.href = 'profile.html';
     });
     
     confirmBookingBtn.addEventListener('click', () => {
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (document.getElementById('profile-form')) {
     const profileForm = document.getElementById('profile-form');
     
-    // Fill form if user exists
+    // Redirect if user exists (for demo purposes)
     if (currentUser) {
       document.getElementById('name').value = currentUser.name;
       document.getElementById('room').value = currentUser.room;

@@ -3,44 +3,32 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Главная страница
   if (document.getElementById('schedule-table')) {
-    const datePicker = document.getElementById('date-picker');
-    const currentDateEl = document.getElementById('current-date');
     const profileBtn = document.getElementById('profile-btn');
-    const tableBody = document.querySelector('#schedule-table tbody');
-    
-    // Инициализация даты
-    const today = new Date();
-    const currentDate = today.toISOString().split('T')[0];
-    datePicker.value = currentDate;
-    datePicker.min = currentDate;
-    currentDateEl.textContent = schedule.formatDisplayDate(today);
     
     // Инициализация кнопки профиля
     if (profileBtn) {
       if (currentUser) {
         profileBtn.textContent = `👤 ${currentUser.name} (к.${currentUser.room})`;
-      } else {
-        profileBtn.textContent = '👤 Создать профиль';
       }
       
       profileBtn.addEventListener('click', function() {
         window.location.href = 'profile.html';
       });
     }
-    
+
     // Инициализация расписания
-    schedule.renderSchedule(currentDate, tableBody);
+    schedule.initSchedule();
     
     // Обработчики событий
-    datePicker.addEventListener('change', function(e) {
+    document.getElementById('date-picker').addEventListener('change', function(e) {
       const selectedDate = e.target.value;
-      const date = new Date(selectedDate);
-      currentDateEl.textContent = schedule.formatDisplayDate(date);
-      schedule.renderSchedule(selectedDate, tableBody);
+      document.getElementById('current-date').textContent = schedule.formatDisplayDate(selectedDate);
+      schedule.renderSchedule(selectedDate);
     });
     
     document.getElementById('confirm-booking')?.addEventListener('click', function() {
-      schedule.handleConfirmBooking(datePicker.value);
+      const selectedDate = document.getElementById('date-picker').value;
+      schedule.handleConfirmBooking(selectedDate);
     });
     
     document.getElementById('cancel-booking')?.addEventListener('click', function() {

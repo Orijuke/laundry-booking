@@ -20,13 +20,13 @@ class ScheduleService {
     this.timeSlots.forEach(timeSlot => {
       const row = document.createElement('tr');
       
-      // Time cell
+      // Ячейка времени
       const timeCell = document.createElement('td');
       timeCell.textContent = timeSlot;
       timeCell.classList.add('time-slot');
       row.appendChild(timeCell);
       
-      // Machine cells
+      // Ячейки для машин
       this.machines.forEach(machine => {
         const cell = document.createElement('td');
         const booking = bookings[timeSlot] && bookings[timeSlot][machine];
@@ -56,8 +56,9 @@ class ScheduleService {
   handleSlotClick(timeSlot, machine) {
     const currentUser = this.storage.getUser();
     if (!currentUser) {
-      alert('Пожалуйста, создайте профиль для бронирования');
-      window.location.href = 'profile.html';
+      if (confirm('Для бронирования нужно создать профиль. Перейти к настройкам?')) {
+        window.location.href = 'profile.html';
+      }
       return;
     }
     
@@ -65,7 +66,6 @@ class ScheduleService {
     document.getElementById('modal-machine').textContent = machine;
     document.getElementById('booking-modal').classList.add('visible');
     
-    // Store selected slot temporarily
     this.selectedSlot = { timeSlot, machine };
   }
 

@@ -98,7 +98,11 @@ function generateSchedule(date) {
       
       if (booking) {
         const user = storage.getProfiles().find(p => p.id === booking.userId);
-        cell.innerHTML = `<span style="color: ${user.color}">${user.name}</span>`;
+        cell.innerHTML = `
+          <span style="color: ${user.color}; font-weight: bold">
+            ${user.name} (к.${user.room})
+          </span>
+        `;
       } else {
         cell.classList.add('bookable');
         cell.dataset.time = time;

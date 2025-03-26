@@ -144,3 +144,25 @@ document.getElementById('confirm-booking').addEventListener('click', () => {
     generateSchedule(date);
   }
 });
+
+// Обновляем дату при выборе
+document.getElementById('date-picker').addEventListener('change', (e) => {
+  generateSchedule(e.target.value);
+  updateDateDisplay(e.target.value);
+});
+
+// Показываем текущую дату
+function updateDateDisplay(dateString) {
+  const date = new Date(dateString);
+  const options = { day: 'numeric', month: 'long', weekday: 'long' };
+  document.getElementById('current-date').textContent = 
+    date.toLocaleDateString('ru-RU', options);
+}
+
+// Инициализация при загрузке
+window.addEventListener('DOMContentLoaded', () => {
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('date-picker').value = today;
+  updateDateDisplay(today);
+  generateSchedule(today);
+});

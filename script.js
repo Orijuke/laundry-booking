@@ -68,6 +68,15 @@ const storage = {
   }
 };
 
+cancelSlot(date, time, machine) {
+    const schedule = this.getSchedule();
+    const updated = schedule.filter(slot => 
+      !(slot.date === date && slot.time === time && slot.machine === machine)
+    );
+    localStorage.setItem('laundrySchedule', JSON.stringify(updated));
+  }
+};
+
 // Фиксированные временные слоты
 const TIME_SLOTS = [
   '8:00 - 8:30', '8:45 - 9:15', '9:30 - 10:00', '10:15 - 10:45',

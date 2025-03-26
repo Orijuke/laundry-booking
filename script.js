@@ -54,3 +54,16 @@ const storage = {
   },
 
   // Забронировать окно
+  // Новый формат брони:
+  // { date, time, machine, userId }
+  bookSlot(date, time, machine, userId) {
+    const schedule = this.getSchedule();
+    schedule.push({ date, time, machine, userId });
+    localStorage.setItem('laundrySchedule', JSON.stringify(schedule));
+  },
+
+  // Получить брони для конкретного дня
+  getDaySchedule(date) {
+    return this.getSchedule().filter(slot => slot.date === date);
+  }
+};

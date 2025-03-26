@@ -28,12 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
         profileBtn.textContent = '👤 Создать профиль';
       }
       
-      // Надежный обработчик клика
-      profileBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        window.location.href = 'profile.html';
-      });
-      
     if (currentUser) {
       profileBtn.textContent = `👤 ${currentUser.name} (к.${currentUser.room})`;
       profileBtn.addEventListener('click', () => {

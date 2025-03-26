@@ -20,6 +20,20 @@ document.addEventListener('DOMContentLoaded', () => {
     currentDateEl.textContent = schedule.formatDisplayDate(today);
     
     // Initialize profile button
+    const profileBtn = document.getElementById('profile-btn');
+    if (profileBtn) {
+      if (currentUser) {
+        profileBtn.textContent = `👤 ${currentUser.name} (к.${currentUser.room})`;
+      } else {
+        profileBtn.textContent = '👤 Создать профиль';
+      }
+      
+      // Надежный обработчик клика
+      profileBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.location.href = 'profile.html';
+      });
+      
     if (currentUser) {
       profileBtn.textContent = `👤 ${currentUser.name} (к.${currentUser.room})`;
       profileBtn.addEventListener('click', () => {

@@ -11,7 +11,18 @@ class ScheduleService {
     this.storage = storage;
   }
 
-  renderSchedule(date, tableBody) {
+  initSchedule() {
+    const datePicker = document.getElementById('date-picker');
+    const currentDate = new Date().toISOString().split('T')[0];
+    datePicker.value = currentDate;
+    datePicker.min = currentDate;
+    this.renderSchedule(currentDate);
+  }
+
+  renderSchedule(date) {
+    const tableBody = document.querySelector('#schedule-table tbody');
+    if (!tableBody) return;
+
     tableBody.innerHTML = '';
     
     const bookings = this.storage.getBookingsForDate(date);
@@ -38,7 +49,7 @@ class ScheduleService {
           
           if (currentUser && booking.userId === currentUser.id) {
             cell.classList.add('my-booking');
-            cell.addEventListener('click', () => this.handleCancelBooking(date, timeSlot, machine, tableBody));
+            cell.addEventListener('click', () => this.handleCancelBooking(date, timeSlot, machine));
           }
         } else {
           cell.textContent = 'Свободно';
@@ -79,19 +90,20 @@ class ScheduleService {
     this.storage.saveBooking(date, timeSlot, machine, currentUser);
     
     document.getElementById('booking-modal').classList.remove('visible');
-    this.renderSchedule(date, document.querySelector('#schedule-table tbody'));
+    this.renderSchedule(date);
     this.selectedSlot = null;
   }
 
-  handleCancelBooking(date, timeSlot, machine, tableBody) {
+  handleCancelBooking(date, timeSlot, machine) {
     if (confirm('Вы действительно хотите отменить бронирование?')) {
       if (this.storage.cancelBooking(date, timeSlot, machine)) {
-        this.renderSchedule(date, tableBody);
+        this.renderSchedule(date);
       }
     }
   }
 
-  formatDisplayDate(date) {
+  formatDisplayDate(dateStr) {
+    const date = new Date(dateStr);
     const options = { day: 'numeric', month: 'long', weekday: 'long' };
     return date.toLocaleDateString('ru-RU', options);
   }

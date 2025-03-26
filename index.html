@@ -14,18 +14,20 @@
   </header>
 
   <main>
-    <table id="schedule-table">
-      <thead>
-        <tr>
-          <th>Время</th>
-          <th>У стены</th>
-          <th>У двери</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Слоты будут генерироваться через JS -->
-      </tbody>
-    </table>
+    <div class="table-container">
+      <table id="schedule-table">
+        <thead>
+          <tr>
+            <th>Время</th>
+            <th>У стены</th>
+            <th>У двери</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Слоты будут заполнены JavaScript -->
+        </tbody>
+      </table>
+    </div>
   </main>
 
   <div id="booking-modal" class="modal hidden">
@@ -36,5 +38,8 @@
     </div>
   </div>
 
-  <script src="storage.js"></script>
-  <script src="schedule.js"></script
+  <script src="js/storage.js"></script>
+  <script src="js/schedule.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

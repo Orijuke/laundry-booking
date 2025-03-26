@@ -166,3 +166,49 @@ window.addEventListener('DOMContentLoaded', () => {
   updateDateDisplay(today);
   generateSchedule(today);
 });
+
+// Общие функции для всех страниц
+const ProfileManager = {
+  // Загрузить профиль
+  loadProfile() {
+    const profile = JSON.parse(localStorage.getItem('laundryProfile')) || {};
+    if (profile.name) {
+      document.getElementById('profile-name').textContent = profile.name;
+    }
+    return profile;
+  },
+
+  // Сохранить профиль
+  saveProfile(profile) {
+    localStorage.setItem('laundryProfile', JSON.stringify(profile));
+    this.loadProfile(); // Обновляем отображение
+  }
+};
+
+// Для index.html
+if (document.getElementById('profile-name')) {
+  ProfileManager.loadProfile();
+}
+
+// Для profile.html
+if (document.getElementById('profile-form')) {
+  // Заполняем форму текущими данными
+  const profile = ProfileManager.loadProfile();
+  document.getElementById('name').value = profile.name || '';
+  document.getElementById('room').value = profile.room || '';
+  document.getElementById('color').value = profile.color || '#5e9c76';
+
+  // Обработка сохранения
+  document.getElementById('profile-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const newProfile = {
+      name: document.getElementById('name').value.trim(),
+      room: document.getElementById('room').value,
+      color: document.getElementById('color').value
+    };
+    
+    ProfileManager.saveProfile(newProfile);
+    window.location.href = 'index.html'; // Возвращаем на главную
+  });
+}

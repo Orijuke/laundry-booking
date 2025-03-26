@@ -4,41 +4,61 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Стирка - Общежитие</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/calendar.css">
 </head>
 <body>
-  <header>
-    <!-- В шапке -->
-    <button id="profile-btn" onclick="location.href='profile.html'">
-      👤 <span id="profile-name">Профиль</span>
-    </button><button id="profile-btn">👤 Имя</button>
-    <h1 id="current-date">27 марта, понедельник</h1>
-    <input type="date" id="date-picker">
+  <header class="app-header">
+    <div class="header-left">
+      <button id="menu-btn" class="btn-icon">☰</button>
+      <h1 class="app-title">Запись на стирку</h1>
+    </div>
+    <button id="profile-btn" class="btn-text">
+      <span id="profile-name">Профиль</span>
+    </button>
   </header>
 
-  <main>
-    <table id="schedule-table">
-      <thead>
-        <tr>
-          <th>Время</th>
-          <th>У стены</th>
-          <th>У двери</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Слоты будут генерироваться через JS -->
-      </tbody>
-    </table>
+  <nav class="app-nav">
+    <a href="#" class="nav-link active" data-target="index.html">Расписание</a>
+    <a href="#" class="nav-link" data-target="profile.html">Профиль</a>
+  </nav>
+
+  <main id="main-content">
+    <div class="calendar-controls">
+      <button id="prev-day" class="btn-icon">←</button>
+      <h2 id="current-date">27 марта, понедельник</h2>
+      <button id="next-day" class="btn-icon">→</button>
+    </div>
+
+    <div id="booking-section">
+      <div class="view-controls">
+        <button id="all-bookings-btn" class="btn-text active">Все записи</button>
+        <button id="my-bookings-btn" class="btn-text">Мои записи</button>
+      </div>
+
+      <table id="schedule-table">
+        <thead>
+          <tr>
+            <th>Время</th>
+            <th>У стены</th>
+            <th>У двери</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Сюда будет вставляться расписание -->
+        </tbody>
+      </table>
+    </div>
   </main>
 
-  <div id="booking-modal" class="modal hidden">
-    <div class="modal-content">
-      <p>Забронировать <span id="modal-time"></span> (<span id="modal-machine"></span>)?</p>
-      <button id="confirm-booking">Подтвердить</button>
-      <button id="cancel-booking">Отмена</button>
-    </div>
+  <!-- Модальные окна и уведомления -->
+  <div id="modal" class="modal hidden">
+    <div id="modal-content" class="modal-content"></div>
   </div>
 
-  <script src="script.js"></script>
+  <div id="alerts"></div>
+
+  <!-- Подключение скриптов -->
+  <script type="module" src="assets/js/app.js"></script>
 </body>
 </html>

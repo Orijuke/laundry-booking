@@ -1,4 +1,10 @@
 class StorageService {
+
+  // Добавим в класс StorageService
+  isUserExists() {
+    return !!localStorage.getItem(this.USER_KEY);
+  }
+  
   constructor() {
     this.USER_KEY = 'laundryUser';
     this.BOOKINGS_KEY = 'laundryBookings';

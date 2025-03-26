@@ -216,3 +216,54 @@ if (document.getElementById('profile-form')) {
     window.location.href = 'index.html'; // Возвращаем на главную
   });
 }
+
+// Новая функция для обработки клика по ячейке
+function handleCellClick(cell, date, time, machine) {
+  const schedule = storage.getSchedule();
+  const profile = storage.getProfiles()[0];
+  
+  // Проверяем есть ли бронь в этой ячейке
+  const existingBooking = schedule.find(s => 
+    s.date === date && 
+    s.time === time && 
+    s.machine === machine
+  );
+  
+  // Если ячейка свободна - бронируем
+  if (!existingBooking && profile) {
+    storage.bookSlot(date, time, machine, profile.id);
+    updateCellAppearance(cell, profile, true);
+    return;
+  }
+  
+  // Если это наша бронь - отменяем
+  if (existingBooking && existingBooking.userId === profile?.id) {
+    storage.cancelSlot(date, time, machine);
+    updateCellAppearance(cell, null, false);
+    return;
+  }
+  
+  // Если ячейка занята другим пользователем
+  if (existingBooking) {
+    const user = storage.getProfiles().find(p => p.id === existingBooking.userId);
+    alert(`Это время уже занято ${user.name} (к.${user.room})`);
+  }
+}
+
+// Обновляем внешний вид ячейки
+function updateCellAppearance(cell, profile, isBooked) {
+  if (isBooked && profile) {
+    cell.innerHTML = `
+      <div class="booking-info" style="color: ${profile.color}">
+        ${profile.name} (к.${profile.room})
+      </div>
+      <div class="cancel-hint">[клик чтобы отменить]</div>
+    `;
+    cell.classList.add('booked');
+    cell.classList.remove('available');
+  } else {
+    cell.innerHTML = '<div class="time-slot">Свободно</div>';
+    cell.classList.add('available');
+    cell.classList.remove('booked');
+  }
+}

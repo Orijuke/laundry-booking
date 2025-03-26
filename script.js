@@ -82,6 +82,7 @@ function generateSchedule(date) {
   const tbody = document.querySelector('#schedule-table tbody');
   tbody.innerHTML = '';
   const daySchedule = storage.getDaySchedule(date);
+  const profile = storage.getProfiles()[0];
 
   TIME_SLOTS.forEach(time => {
     const row = document.createElement('tr');
@@ -96,17 +97,16 @@ function generateSchedule(date) {
       const cell = document.createElement('td');
       const booking = daySchedule.find(s => s.time === time && s.machine === machine);
       
+      // Добавляем обработчик клика
+      cell.addEventListener('click', () => {
+        handleCellClick(cell, date, time, machine);
+      });
+
       if (booking) {
         const user = storage.getProfiles().find(p => p.id === booking.userId);
-        cell.innerHTML = `
-          <span style="color: ${user.color}; font-weight: bold">
-            ${user.name} (к.${user.room})
-          </span>
-        `;
+        updateCellAppearance(cell, user, true);
       } else {
-        cell.classList.add('bookable');
-        cell.dataset.time = time;
-        cell.dataset.machine = machine;
+        updateCellAppearance(cell, null, false);
       }
       
       row.appendChild(cell);

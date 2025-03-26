@@ -1,48 +1,53 @@
 /* Основные стили */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Open Sans', sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f0f2f5;
-  color: #333;
+  background-color: #F5E8DF; /* Светло-персиково-бежевый */
+  color: #000;
 }
 
 header {
-  background-color: #2c3e50;
-  color: white;
+  background-color: #fff;
   padding: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  border-bottom: 3px solid #000;
 }
 
 #profile-btn {
-  background-color: #3498db;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #000;
   cursor: pointer;
-  font-size: 1rem;
-  transition: all 0.2s;
+  border: 3px solid;
+  padding: 0.25em 0.5em;
+  background: #fff;
+  box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px;
+  position: relative;
 }
 
-#profile-btn:hover {
-  background-color: #2980b9;
-  transform: scale(1.05);
+#profile-btn:active {
+  box-shadow: 0px 0px 0px 0px;
+  top: 3px;
+  left: 3px;
 }
 
 #current-date {
   margin: 0;
   font-size: 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 #date-picker {
-  padding: 0.5rem;
-  border: none;
-  border-radius: 4px;
-  background-color: white;
+  padding: 0.5em;
+  border: 3px solid #000;
+  font-family: 'Open Sans', sans-serif;
+  background: #fff;
 }
 
 main {
@@ -51,97 +56,70 @@ main {
   margin: 0 auto;
 }
 
-#confirm-cancel {
-  background-color: #e74c3c;
-  color: white;
-}
-
-#confirm-cancel:hover {
-  background-color: #c0392b;
-}
-
-#deny-cancel {
-  background-color: #3498db;
-  color: white;
-}
-
-#deny-cancel:hover {
-  background-color: #2980b9;
-}
-
-/* Контейнер таблицы */
+/* Таблица */
 .table-container {
   overflow-x: auto;
   width: 100%;
   margin-top: 1rem;
 }
 
-/* Стили таблицы */
 #schedule-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background-color: #fff;
+  border: 3px solid #000;
 }
 
 #schedule-table th, #schedule-table td {
   padding: 0.75rem;
   text-align: center;
-  border: 1px solid #ddd;
+  border: 3px solid #000;
 }
 
 #schedule-table th {
-  background-color: #2c3e50;
-  color: white;
-  position: sticky;
-  top: 0;
-}
-
-#schedule-table tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: #fff;
+  color: #000;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .time-slot {
-  font-weight: bold;
-  background-color: #f1f1f1 !important;
+  font-weight: 600;
+  background-color: #fff !important;
   white-space: nowrap;
 }
 
 .machine-slot {
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.1s;
   min-width: 120px;
 }
 
 .machine-slot.available {
-  background-color: #e8f5e9;
+  background-color: #F5E8DF;
 }
 
 .machine-slot.available:hover {
-  background-color: #c8e6c9;
+  background-color: #e8d9cf;
 }
 
 .machine-slot.booked {
-  color: white;
-  font-weight: bold;
+  color: #000;
+  font-weight: 600;
   position: relative;
+  background-color: #fff;
 }
 
-.machine-slot.my-booking::after {
-  content: '✕';
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  font-size: 0.8rem;
-  opacity: 0;
-  transition: opacity 0.2s;
+.machine-slot.my-booking {
+  background-color: #fff !important;
 }
 
-.machine-slot.my-booking:hover::after {
-  opacity: 1;
+.machine-slot.my-booking:hover {
+  outline: 3px solid #000;
 }
 
-/* Модальное окно */
+/* Модальные окна */
 .modal {
   display: none;
   position: fixed;
@@ -150,7 +128,7 @@ main {
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0,0,0,0.7);
 }
 
 .modal.visible {
@@ -160,45 +138,50 @@ main {
 }
 
 .modal-content {
-  background-color: white;
+  background-color: #fff;
   padding: 2rem;
-  border-radius: 8px;
+  border: 3px solid #000;
   width: 90%;
   max-width: 400px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  text-align: center;
 }
 
 .modal-content p {
   margin-top: 0;
   font-size: 1.1rem;
+  margin-bottom: 1.5rem;
 }
 
-.modal-content button {
-  padding: 0.5rem 1rem;
-  margin: 0.5rem;
-  border: none;
-  border-radius: 4px;
+.button-group {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+/* Общие стили кнопок */
+.button-54 {
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: #000;
   cursor: pointer;
-  font-size: 1rem;
+  border: 3px solid;
+  padding: 0.25em 0.5em;
+  background: #fff;
+  box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px;
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  flex-grow: 1;
+  text-align: center;
 }
 
-#confirm-booking {
-  background-color: #27ae60;
-  color: white;
-}
-
-#confirm-booking:hover {
-  background-color: #2ecc71;
-}
-
-#cancel-booking {
-  background-color: #e74c3c;
-  color: white;
-}
-
-#cancel-booking:hover {
-  background-color: #c0392b;
+.button-54:active {
+  box-shadow: 0px 0px 0px 0px;
+  top: 3px;
+  left: 3px;
 }
 
 /* Страница профиля */
@@ -206,15 +189,15 @@ main {
   max-width: 500px;
   margin: 2rem auto;
   padding: 2rem;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  background-color: #fff;
+  border: 3px solid #000;
 }
 
 .profile-container h1 {
   margin-top: 0;
-  color: #2c3e50;
   text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
 .form-group {
@@ -224,18 +207,18 @@ main {
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
-  font-weight: bold;
-  color: #2c3e50;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .form-group input,
 .form-group select {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  box-sizing: border-box;
+  padding: 0.5em;
+  border: 3px solid #000;
+  font-family: 'Open Sans', sans-serif;
+  background: #fff;
 }
 
 .form-group input[type="color"] {
@@ -246,26 +229,32 @@ main {
 
 .submit-btn {
   width: 100%;
-  padding: 1rem;
-  background-color: #27ae60;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 1.1rem;
+  padding: 0.5em;
+  border: 3px solid #000;
+  background: #fff;
+  font-family: 'Open Sans', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
+  box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px;
+  position: relative;
 }
 
-.submit-btn:hover {
-  background-color: #2ecc71;
+.submit-btn:active {
+  box-shadow: 0px 0px 0px 0px;
+  top: 3px;
+  left: 3px;
 }
 
 .back-link {
   display: inline-block;
   margin-top: 1.5rem;
-  color: #3498db;
+  color: #000;
   text-decoration: none;
-  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .back-link:hover {
@@ -276,14 +265,13 @@ main {
 @media (max-width: 600px) {
   header {
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 1rem;
     align-items: flex-start;
   }
   
   #schedule-table th, 
   #schedule-table td {
     padding: 0.5rem;
-    font-size: 0.9rem;
   }
   
   .modal-content {

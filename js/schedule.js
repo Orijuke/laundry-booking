@@ -64,21 +64,42 @@ class ScheduleService {
     });
   }
 
-  handleSlotClick(timeSlot, machine) {
-    const currentUser = this.storage.getUser();
-    if (!currentUser) {
-      if (confirm('Для бронирования нужно создать профиль. Перейти к настройкам?')) {
-        window.location.href = 'profile.html';
-      }
-      return;
+ handleSlotClick(timeSlot, machine) {
+  const currentUser = this.storage.getUser();
+  if (!currentUser) {
+    if (confirm('Для бронирования нужно создать профиль. Перейти к настройкам?')) {
+      window.location.href = 'profile.html';
     }
-    
-    document.getElementById('modal-time').textContent = timeSlot;
-    document.getElementById('modal-machine').textContent = machine;
-    document.getElementById('booking-modal').classList.add('visible');
-    
-    this.selectedSlot = { timeSlot, machine };
+    return;
   }
+  
+  document.getElementById('modal-time').textContent = timeSlot;
+  document.getElementById('modal-machine').textContent = machine;
+  document.getElementById('booking-modal').classList.add('visible');
+  
+  this.selectedSlot = { timeSlot, machine };
+}
+
+handleCancelBooking(date, timeSlot, machine) {
+  document.getElementById('cancel-modal-time').textContent = timeSlot;
+  document.getElementById('cancel-modal-machine').textContent = machine;
+  document.getElementById('cancel-modal').classList.add('visible');
+  
+  // Сохраняем данные о выбранном слоте для отмены
+  this.cancelSlot = { date, timeSlot, machine };
+}
+
+handleConfirmCancel() {
+  if (!this.cancelSlot) return;
+  
+  const { date, timeSlot, machine } = this.cancelSlot;
+  if (this.storage.cancelBooking(date, timeSlot, machine)) {
+    this.renderSchedule(date);
+  }
+  
+  document.getElementById('cancel-modal').classList.remove('visible');
+  this.cancelSlot = null;
+}
 
   handleConfirmBooking(date) {
     if (!this.selectedSlot) return;

@@ -67,3 +67,47 @@ const storage = {
     return this.getSchedule().filter(slot => slot.date === date);
   }
 };
+
+// Фиксированные временные слоты
+const TIME_SLOTS = [
+  '8:00 - 8:30', '8:45 - 9:15', '9:30 - 10:00', '10:15 - 10:45',
+  '11:00 - 11:30', '11:45 - 12:15', '12:30 - 13:00', '13:15 - 13:45',
+  '14:00 - 14:30', '14:45 - 15:15', '15:30 - 16:00', '16:15 - 16:45',
+  '17:00 - 17:30', '17:45 - 18:15', '18:30 - 19:00', '19:15 - 19:45',
+  '20:00 - 20:30', '20:45 - 21:15', '21:30 - 22:00', '22:15 - 23:00'
+];
+
+// Генерация таблицы
+function generateSchedule(date) {
+  const tbody = document.querySelector('#schedule-table tbody');
+  tbody.innerHTML = '';
+  const daySchedule = storage.getDaySchedule(date);
+
+  TIME_SLOTS.forEach(time => {
+    const row = document.createElement('tr');
+    
+    // Колонка времени
+    const timeCell = document.createElement('td');
+    timeCell.textContent = time;
+    row.appendChild(timeCell);
+
+    // Колонки для машин
+    ['У стены', 'У двери'].forEach(machine => {
+      const cell = document.createElement('td');
+      const booking = daySchedule.find(s => s.time === time && s.machine === machine);
+      
+      if (booking) {
+        const user = storage.getProfiles().find(p => p.id === booking.userId);
+        cell.innerHTML = `<span style="color: ${user.color}">${user.name}</span>`;
+      } else {
+        cell.classList.add('bookable');
+        cell.dataset.time = time;
+        cell.dataset.machine = machine;
+      }
+      
+      row.appendChild(cell);
+    });
+
+    tbody.appendChild(row);
+  });
+}

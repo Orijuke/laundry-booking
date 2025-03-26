@@ -46,7 +46,7 @@ class ScheduleService {
         const booking = bookings[timeSlot] && bookings[timeSlot][machine];
         
         if (booking) {
-          cell.textContent = `${booking.userName} (к.${booking.room})`;
+          cell.textContent = `${booking.userName} | ${booking.room}`;
           cell.style.backgroundColor = booking.color;
           cell.classList.add('booked');
           

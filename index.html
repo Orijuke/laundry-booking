@@ -7,14 +7,9 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <script>
-    if (!localStorage.getItem('laundryUser') && !window.location.pathname.endsWith('profile.html')) {
-      window.location.href = 'profile.html';
-    }
-  </script>
   <header>
-    <button id="profile-btn">👤 Имя</button>
-    <h1 id="current-date">27 марта, понедельник</h1>
+    <button id="profile-btn">👤 Гость</button>
+    <h1 id="current-date"></h1>
     <input type="date" id="date-picker">
   </header>
 
@@ -35,4 +30,11 @@
 
   <div id="booking-modal" class="modal hidden">
     <div class="modal-content">
-      <p>Забронировать <span id="modal-time"></span> (<span id="modal-machine"></span>
+      <p>Забронировать <span id="modal-time"></span> (<span id="modal-machine"></span>)?</p>
+      <button id="confirm-booking">Подтвердить</button>
+      <button id="cancel-booking">Отмена</button>
+    </div>
+  </div>
+
+  <script src="storage.js"></script>
+  <script src="schedule.js"></script

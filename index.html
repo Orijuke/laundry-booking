@@ -1,64 +1,48 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Стирка - Общежитие</title>
-  <link rel="stylesheet" href="assets/css/main.css">
-  <link rel="stylesheet" href="assets/css/calendar.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бронирование стиральных машин</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <header class="app-header">
-    <div class="header-left">
-      <button id="menu-btn" class="btn-icon">☰</button>
-      <h1 class="app-title">Запись на стирку</h1>
+    <header>
+        <div class="date-selector">
+            <input type="date" id="datePicker">
+        </div>
+        <div class="profile-button" id="profileButton">
+            <span id="userNameDisplay">Гость</span>
+        </div>
+    </header>
+    
+    <main>
+        <div class="schedule-container">
+            <table id="scheduleTable">
+                <thead>
+                    <tr>
+                        <th>Время</th>
+                        <th>У стены</th>
+                        <th>У двери</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Расписание будет заполнено JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <div class="modal" id="bookingModal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="modalText">Забронировать стиральную машину на <span id="modalTime"></span>?</p>
+            <button id="confirmBooking">Подтвердить</button>
+        </div>
     </div>
-    <button id="profile-btn" class="btn-text">
-      <span id="profile-name">Профиль</span>
-    </button>
-  </header>
 
-  <nav class="app-nav">
-    <a href="#" class="nav-link active" data-target="index.html">Расписание</a>
-    <a href="#" class="nav-link" data-target="profile.html">Профиль</a>
-  </nav>
-
-  <main id="main-content">
-    <div class="calendar-controls">
-      <button id="prev-day" class="btn-icon">←</button>
-      <h2 id="current-date">27 марта, понедельник</h2>
-      <button id="next-day" class="btn-icon">→</button>
-    </div>
-
-    <div id="booking-section">
-      <div class="view-controls">
-        <button id="all-bookings-btn" class="btn-text active">Все записи</button>
-        <button id="my-bookings-btn" class="btn-text">Мои записи</button>
-      </div>
-
-      <table id="schedule-table">
-        <thead>
-          <tr>
-            <th>Время</th>
-            <th>У стены</th>
-            <th>У двери</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Сюда будет вставляться расписание -->
-        </tbody>
-      </table>
-    </div>
-  </main>
-
-  <!-- Модальные окна и уведомления -->
-  <div id="modal" class="modal hidden">
-    <div id="modal-content" class="modal-content"></div>
-  </div>
-
-  <div id="alerts"></div>
-
-  <!-- Подключение скриптов -->
-  <script type="module" src="assets/js/app.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/schedule.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>

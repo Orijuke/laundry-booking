@@ -1,66 +1,70 @@
-class StorageManager {
-    constructor() {
-        this.usersKey = 'laundryUsers';
-        this.bookingsKey = 'laundryBookings';
-        this.currentUserKey = 'currentLaundryUser';
-    }
+class StorageService {
+  constructor() {
+    this.USER_KEY = 'laundryUser';
+    this.BOOKINGS_KEY = 'laundryBookings';
+  }
 
-    // Работа с пользователями
-    getUsers() {
-        return JSON.parse(localStorage.getItem(this.usersKey)) || {};
-    }
+  // User methods
+  getUser() {
+    const userData = localStorage.getItem(this.USER_KEY);
+    return userData ? JSON.parse(userData) : null;
+  }
 
-    saveUser(user) {
-        const users = this.getUsers();
-        users[user.id] = user;
-        localStorage.setItem(this.usersKey, JSON.stringify(users));
+  saveUser(user) {
+    if (!user.id) {
+      user.id = this.generateId();
     }
+    localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+    return user;
+  }
 
-    getCurrentUser() {
-        return JSON.parse(localStorage.getItem(this.currentUserKey));
-    }
+  // Bookings methods
+  getBookings() {
+    const bookingsData = localStorage.getItem(this.BOOKINGS_KEY);
+    return bookingsData ? JSON.parse(bookingsData) : {};
+  }
 
-    setCurrentUser(user) {
-        localStorage.setItem(this.currentUserKey, JSON.stringify(user));
-    }
+  getBookingsForDate(date) {
+    const allBookings = this.getBookings();
+    return allBookings[date] || {};
+  }
 
-    // Работа с бронированиями
-    getBookings() {
-        return JSON.parse(localStorage.getItem(this.bookingsKey)) || {};
+  saveBooking(date, timeSlot, machine, user) {
+    const allBookings = this.getBookings();
+    
+    if (!allBookings[date]) {
+      allBookings[date] = {};
     }
+    
+    if (!allBookings[date][timeSlot]) {
+      allBookings[date][timeSlot] = {};
+    }
+    
+    allBookings[date][timeSlot][machine] = {
+      userId: user.id,
+      userName: user.name,
+      room: user.room,
+      color: user.color
+    };
+    
+    localStorage.setItem(this.BOOKINGS_KEY, JSON.stringify(allBookings));
+  }
 
-    saveBooking(date, timeSlot, machine, user) {
-        const bookings = this.getBookings();
-        
-        if (!bookings[date]) {
-            bookings[date] = {};
-        }
-        
-        if (!bookings[date][timeSlot]) {
-            bookings[date][timeSlot] = {};
-        }
-        
-        bookings[date][timeSlot][machine] = {
-            userId: user.id,
-            userName: user.name,
-            room: user.room,
-            color: user.color
-        };
-        
-        localStorage.setItem(this.bookingsKey, JSON.stringify(bookings));
+  cancelBooking(date, timeSlot, machine) {
+    const allBookings = this.getBookings();
+    
+    if (allBookings[date] && allBookings[date][timeSlot] && allBookings[date][timeSlot][machine]) {
+      delete allBookings[date][timeSlot][machine];
+      localStorage.setItem(this.BOOKINGS_KEY, JSON.stringify(allBookings));
+      return true;
     }
+    return false;
+  }
 
-    cancelBooking(date, timeSlot, machine) {
-        const bookings = this.getBookings();
-        
-        if (bookings[date] && bookings[date][timeSlot] && bookings[date][timeSlot][machine]) {
-            delete bookings[date][timeSlot][machine];
-            localStorage.setItem(this.bookingsKey, JSON.stringify(bookings));
-        }
-    }
-
-    // Генерация ID
-    generateId() {
-        return Math.random().toString(36).substr(2, 9);
-    }
+  // Helper
+  generateId() {
+    return Math.random().toString(36).substr(2, 9);
+  }
 }
+
+const storage = new StorageService();

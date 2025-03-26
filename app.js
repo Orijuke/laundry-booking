@@ -20,13 +20,17 @@ document.addEventListener('DOMContentLoaded', () => {
     currentDateEl.textContent = schedule.formatDisplayDate(today);
     
     // Initialize profile button
+    // В секции Index page logic заменим инициализацию кнопки профиля
     if (currentUser) {
-      profileBtn.textContent = `👤 ${currentUser.name}`;
-    } else {
-      setTimeout(() => {
-        alert('Пожалуйста, создайте профиль для бронирования');
+      profileBtn.textContent = `👤 ${currentUser.name} (к.${currentUser.room})`;
+      profileBtn.addEventListener('click', () => {
         window.location.href = 'profile.html';
-      }, 500);
+      });
+    } else {
+      profileBtn.textContent = '👤 Создать профиль';
+      profileBtn.addEventListener('click', () => {
+        window.location.href = 'profile.html';
+      });
     }
     
     // Render initial schedule

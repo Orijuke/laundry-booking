@@ -1,48 +1,41 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Бронирование стиральных машин</title>
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Стирка - Общежитие</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <div class="date-selector">
-            <input type="date" id="datePicker">
-        </div>
-        <div class="profile-button" id="profileButton">
-            <span id="userNameDisplay">Гость</span>
-        </div>
-    </header>
-    
-    <main>
-        <div class="schedule-container">
-            <table id="scheduleTable">
-                <thead>
-                    <tr>
-                        <th>Время</th>
-                        <th>У стены</th>
-                        <th>У двери</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Расписание будет заполнено JavaScript -->
-                </tbody>
-            </table>
-        </div>
-    </main>
+  <header>
+    <button id="profile-btn">👤 Имя</button>
+    <h1 id="current-date">27 марта, понедельник</h1>
+    <input type="date" id="date-picker">
+  </header>
 
-    <div class="modal" id="bookingModal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <p id="modalText">Забронировать стиральную машину на <span id="modalTime"></span>?</p>
-            <button id="confirmBooking">Подтвердить</button>
-        </div>
+  <main>
+    <table id="schedule-table">
+      <thead>
+        <tr>
+          <th>Время</th>
+          <th>У стены</th>
+          <th>У двери</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Слоты будут генерироваться через JS -->
+      </tbody>
+    </table>
+  </main>
+
+  <div id="booking-modal" class="modal hidden">
+    <div class="modal-content">
+      <p>Забронировать <span id="modal-time"></span> (<span id="modal-machine"></span>)?</p>
+      <button id="confirm-booking">Подтвердить</button>
+      <button id="cancel-booking">Отмена</button>
     </div>
+  </div>
 
-    <script src="js/storage.js"></script>
-    <script src="js/schedule.js"></script>
-    <script src="js/app.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

@@ -23,6 +23,11 @@ class ScheduleService {
   }
 
   renderSchedule(date) {
+
+    if (booking) {
+      cell.textContent = `${booking.userName} | ${booking.room}`;
+      cell.style.backgroundColor = booking.color;
+
     const tableBody = document.querySelector('#schedule-table tbody');
     if (!tableBody) return;
 

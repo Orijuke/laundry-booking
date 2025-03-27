@@ -79,23 +79,16 @@
     </div>
   </div>
 
-  <!-- Подключаем скрипты с атрибутом defer для правильного порядка выполнения -->
-  <script src="js/storage.js" defer></script>
-  <script src="js/schedule.js" defer></script>
-  <script src="js/app.js" defer></script>
+  <script src="js/storage.js"></script>
+  <script src="js/schedule.js"></script>
+  <script src="js/app.js"></script>
 
   <script>
-    // Инициализация текущей даты в заголовке (с проверкой полной загрузки DOM)
+    // Инициализация текущей даты в заголовке
     document.addEventListener('DOMContentLoaded', function() {
       const today = new Date();
       const options = { day: 'numeric', month: 'long', weekday: 'long' };
       document.getElementById('current-date').textContent = today.toLocaleDateString('ru-RU', options);
-      
-      // Устанавливаем текущую дату в date-picker
-      const datePicker = document.getElementById('date-picker');
-      const formattedDate = today.toISOString().split('T')[0];
-      datePicker.value = formattedDate;
-      datePicker.min = formattedDate; // Запрещаем выбирать прошедшие даты
     });
   </script>
 </body>

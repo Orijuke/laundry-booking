@@ -1,17 +1,4 @@
 <!DOCTYPE html>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
-  import { getDatabase } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-database.js";
-
-  const firebaseConfig = {
-    databaseURL: "https://laundry-booking-sedova-91k6-default-rtdb.europe-west1.firebasedatabase.app"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-</script>
-
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -21,6 +8,30 @@
   <link rel="icon" href="img/laundry-machine.png" type="image/png">
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Подключаем Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+  
+  <script>
+    // Инициализация Firebase
+    const firebaseConfig = {
+      databaseURL: "https://laundry-booking-sedova-91k6-default-rtdb.europe-west1.firebasedatabase.app"
+    };
+    
+    // Инициализируем Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    
+    // Делаем db глобально доступной для других скриптов
+    window.db = db;
+
+    // Тест подключения (можно удалить после проверки)
+    db.ref('testConnection').set({
+      message: "Firebase подключен!",
+      timestamp: firebase.database.ServerValue.TIMESTAMP
+    }).then(() => console.log("Тестовая запись отправлена"));
+  </script>
 </head>
 <body>
   <header>

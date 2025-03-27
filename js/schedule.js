@@ -14,116 +14,189 @@ class ScheduleService {
   }
 
   initSchedule() {
-    const datePicker = document.getElementById('date-picker');
-    const currentDate = new Date().toISOString().split('T')[0];
-    datePicker.value = currentDate;
-    datePicker.min = currentDate;
-    document.getElementById('current-date').textContent = this.formatDisplayDate(currentDate);
-    this.renderSchedule(currentDate);
+    // Проверка существования элементов DOM
+    if (!document.getElementById('date-picker') || !document.getElementById('current-date')) {
+      console.error('Required DOM elements not found');
+      return;
+    }
+
+    try {
+      const datePicker = document.getElementById('date-picker');
+      const currentDate = new Date().toISOString().split('T')[0];
+      
+      datePicker.value = currentDate;
+      datePicker.min = currentDate;
+      datePicker.addEventListener('change', (e) => {
+        this.renderSchedule(e.target.value);
+        document.getElementById('current-date').textContent = this.formatDisplayDate(e.target.value);
+      });
+      
+      document.getElementById('current-date').textContent = this.formatDisplayDate(currentDate);
+      this.renderSchedule(currentDate);
+    } catch (error) {
+      console.error('Error initializing schedule:', error);
+    }
   }
 
   renderSchedule(date) {
     const tableBody = document.querySelector('#schedule-table tbody');
-    if (!tableBody) return;
-
-    tableBody.innerHTML = '';
-    
-    const bookings = this.storage.getBookingsForDate(date);
-    const currentUser = this.storage.getUser();
-    
-    this.timeSlots.forEach(timeSlot => {
-      const row = document.createElement('tr');
-      
-      // Ячейка времени
-      const timeCell = document.createElement('td');
-      timeCell.textContent = timeSlot;
-      timeCell.classList.add('time-slot');
-      row.appendChild(timeCell);
-      
-      // Ячейки для машин
-      this.machines.forEach(machine => {
-        const cell = document.createElement('td');
-        const booking = bookings[timeSlot] && bookings[timeSlot][machine];
-        
-        if (booking) {
-          cell.textContent = `${booking.userName} | ${booking.room}`;
-          cell.style.backgroundColor = booking.color;
-          cell.classList.add('booked');
-          
-          if (currentUser && booking.userId === currentUser.id) {
-            cell.classList.add('my-booking');
-            cell.addEventListener('click', () => this.handleCancelBooking(date, timeSlot, machine));
-          }
-        } else {
-          cell.textContent = 'Свободно';
-          cell.classList.add('available', 'machine-slot');
-          cell.addEventListener('click', () => this.handleSlotClick(timeSlot, machine));
-        }
-        
-        row.appendChild(cell);
-      });
-      
-      tableBody.appendChild(row);
-    });
-  }
-
-  handleSlotClick(timeSlot, machine) {
-    const currentUser = this.storage.getUser();
-    if (!currentUser) {
-      if (confirm('Для бронирования нужно создать профиль. Перейти к настройкам?')) {
-        window.location.href = 'profile.html';
-      }
+    if (!tableBody) {
+      console.error('Table body not found');
       return;
     }
 
-    document.getElementById('modal-time').textContent = timeSlot;
-    const machineText = machine === 'У стены' ? 'у стены' : 'у двери';
-    document.getElementById('modal-machine').textContent = machineText;
-    document.getElementById('booking-modal').classList.add('visible');
-    
-    this.selectedSlot = { timeSlot, machine };
+    try {
+      tableBody.innerHTML = '';
+      
+      const bookings = this.storage.getBookingsForDate(date) || {};
+      const currentUser = this.storage.getUser();
+      
+      this.timeSlots.forEach(timeSlot => {
+        const row = document.createElement('tr');
+        
+        // Ячейка времени
+        const timeCell = document.createElement('td');
+        timeCell.textContent = timeSlot;
+        timeCell.classList.add('time-slot');
+        row.appendChild(timeCell);
+        
+        // Ячейки для машин
+        this.machines.forEach(machine => {
+          const cell = document.createElement('td');
+          const booking = bookings[timeSlot]?.[machine];
+          
+          if (booking) {
+            cell.textContent = `${booking.userName} | ${booking.room}`;
+            cell.style.backgroundColor = booking.color || '#f0f0f0';
+            cell.classList.add('booked');
+            
+            if (currentUser && booking.userId === currentUser.id) {
+              cell.classList.add('my-booking');
+              cell.addEventListener('click', () => this.handleCancelBooking(date, timeSlot, machine));
+            }
+          } else {
+            cell.textContent = 'Свободно';
+            cell.classList.add('available', 'machine-slot');
+            cell.addEventListener('click', () => this.handleSlotClick(timeSlot, machine));
+          }
+          
+          row.appendChild(cell);
+        });
+        
+        tableBody.appendChild(row);
+      });
+    } catch (error) {
+      console.error('Error rendering schedule:', error);
+    }
+  }
+
+  handleSlotClick(timeSlot, machine) {
+    try {
+      const currentUser = this.storage.getUser();
+      if (!currentUser) {
+        if (confirm('Для бронирования нужно создать профиль. Перейти к настройкам?')) {
+          window.location.href = 'profile.html';
+        }
+        return;
+      }
+
+      const modalTime = document.getElementById('modal-time');
+      const modalMachine = document.getElementById('modal-machine');
+      const bookingModal = document.getElementById('booking-modal');
+      
+      if (!modalTime || !modalMachine || !bookingModal) {
+        console.error('Modal elements not found');
+        return;
+      }
+
+      modalTime.textContent = timeSlot;
+      modalMachine.textContent = machine === 'У стены' ? 'у стены' : 'у двери';
+      bookingModal.classList.remove('hidden');
+      
+      this.selectedSlot = { timeSlot, machine };
+    } catch (error) {
+      console.error('Error handling slot click:', error);
+    }
   }
 
   handleConfirmBooking(date) {
     if (!this.selectedSlot) return;
     
-    const currentUser = this.storage.getUser();
-    if (!currentUser) return;
-    
-    const { timeSlot, machine } = this.selectedSlot;
-    this.storage.saveBooking(date, timeSlot, machine, currentUser);
-    
-    document.getElementById('booking-modal').classList.remove('visible');
-    this.renderSchedule(date);
-    this.selectedSlot = null;
+    try {
+      const currentUser = this.storage.getUser();
+      if (!currentUser) return;
+      
+      const { timeSlot, machine } = this.selectedSlot;
+      this.storage.saveBooking(date, timeSlot, machine, currentUser);
+      
+      document.getElementById('booking-modal').classList.add('hidden');
+      this.renderSchedule(date);
+      this.selectedSlot = null;
+    } catch (error) {
+      console.error('Error confirming booking:', error);
+    }
   }
 
   handleCancelBooking(date, timeSlot, machine) {
-    document.getElementById('cancel-modal-time').textContent = timeSlot;
-    const machineText = machine === 'У стены' ? 'у стены' : 'у двери';
-    document.getElementById('cancel-modal-machine').textContent = machineText;
-    document.getElementById('cancel-modal').classList.add('visible');
-    
-    this.cancelSlot = { date, timeSlot, machine };
+    try {
+      const cancelModalTime = document.getElementById('cancel-modal-time');
+      const cancelModalMachine = document.getElementById('cancel-modal-machine');
+      const cancelModal = document.getElementById('cancel-modal');
+      
+      if (!cancelModalTime || !cancelModalMachine || !cancelModal) {
+        console.error('Cancel modal elements not found');
+        return;
+      }
+
+      cancelModalTime.textContent = timeSlot;
+      cancelModalMachine.textContent = machine === 'У стены' ? 'у стены' : 'у двери';
+      cancelModal.classList.remove('hidden');
+      
+      this.cancelSlot = { date, timeSlot, machine };
+    } catch (error) {
+      console.error('Error handling cancel booking:', error);
+    }
   }
 
   handleConfirmCancel() {
     if (!this.cancelSlot) return;
     
-    const { date, timeSlot, machine } = this.cancelSlot;
-    if (this.storage.cancelBooking(date, timeSlot, machine)) {
-      this.renderSchedule(date);
+    try {
+      const { date, timeSlot, machine } = this.cancelSlot;
+      if (this.storage.cancelBooking(date, timeSlot, machine)) {
+        this.renderSchedule(date);
+      }
+      
+      document.getElementById('cancel-modal').classList.add('hidden');
+      this.cancelSlot = null;
+    } catch (error) {
+      console.error('Error confirming cancel:', error);
     }
-    
-    document.getElementById('cancel-modal').classList.remove('visible');
-    this.cancelSlot = null;
   }
 
   formatDisplayDate(dateStr) {
-    const date = new Date(dateStr);
-    const options = { day: 'numeric', month: 'long', weekday: 'long' };
-    return date.toLocaleDateString('ru-RU', options);
+    try {
+      const date = new Date(dateStr);
+      if (isNaN(date.getTime())) return dateStr;
+      
+      const options = { day: 'numeric', month: 'long', weekday: 'long' };
+      return date.toLocaleDateString('ru-RU', options);
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return dateStr;
+    }
   }
 }
 
-const schedule = new ScheduleService();
+// Проверяем, что storage существует перед созданием экземпляра
+if (typeof storage !== 'undefined') {
+  const schedule = new ScheduleService();
+  
+  // Делаем schedule глобально доступной после полной загрузки
+  document.addEventListener('DOMContentLoaded', () => {
+    window.schedule = schedule;
+    schedule.initSchedule();
+  });
+} else {
+  console.error('Storage service is not available');
+}

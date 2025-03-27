@@ -8,6 +8,30 @@
   <link rel="icon" href="img/laundry-machine.png" type="image/png">
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Подключаем Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+  
+  <script>
+    // Инициализация Firebase
+    const firebaseConfig = {
+      databaseURL: "https://laundry-booking-sedova-91k6-default-rtdb.europe-west1.firebasedatabase.app"
+    };
+    
+    // Инициализируем Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    
+    // Делаем db глобально доступной для других скриптов
+    window.db = db;
+
+    // Тест подключения (можно удалить после проверки)
+    db.ref('testConnection').set({
+      message: "Firebase подключен!",
+      timestamp: firebase.database.ServerValue.TIMESTAMP
+    }).then(() => console.log("Тестовая запись отправлена"));
+  </script>
 </head>
 <body>
   <header>
@@ -55,87 +79,23 @@
     </div>
   </div>
 
-  <!-- Подключаем Firebase и модули -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
-    import { getDatabase } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-database.js";
+  <!-- Подключаем скрипты с атрибутом defer для правильного порядка выполнения -->
+  <script src="js/storage.js" defer></script>
+  <script src="js/schedule.js" defer></script>
+  <script src="js/app.js" defer></script>
 
-    const firebaseConfig = {
-      databaseURL: "https://laundry-booking-sedova-91k6-default-rtdb.europe-west1.firebasedatabase.app"
-    };
-
-    // Инициализация Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
-    // Делаем db доступной глобально (для совместимости)
-    window.db = db;
-    
-    // Загружаем остальные скрипты после инициализации Firebase
-    import { storage } from './js/storage.js';
-    import { schedule } from './js/schedule.js';
-    
-    // Инициализация приложения
-    document.addEventListener('DOMContentLoaded', () => {
-      const currentUser = storage.getUser();
-      
-      // Инициализация кнопки профиля
-      const profileBtn = document.getElementById('profile-btn');
-      if (profileBtn) {
-        if (currentUser) {
-          profileBtn.textContent = `👤 ${currentUser.name || 'Профиль'} | ${currentUser.room || ''}`;
-        }
-        profileBtn.addEventListener('click', () => {
-          window.location.href = 'profile.html';
-        });
-      }
-
-      // Инициализация даты
+  <script>
+    // Инициализация текущей даты в заголовке (с проверкой полной загрузки DOM)
+    document.addEventListener('DOMContentLoaded', function() {
       const today = new Date();
-      const datePicker = document.getElementById('date-picker');
-      const currentDateElement = document.getElementById('current-date');
+      const options = { day: 'numeric', month: 'long', weekday: 'long' };
+      document.getElementById('current-date').textContent = today.toLocaleDateString('ru-RU', options);
       
-      datePicker.value = today.toISOString().split('T')[0];
-      datePicker.min = datePicker.value;
-      currentDateElement.textContent = today.toLocaleDateString('ru-RU', {
-        day: 'numeric',
-        month: 'long',
-        weekday: 'long'
-      });
-
-      // Инициализация расписания
-      if (typeof schedule !== 'undefined') {
-        schedule.initSchedule();
-      }
-
-      // Обработчики событий
-      datePicker.addEventListener('change', (e) => {
-        const selectedDate = e.target.value;
-        currentDateElement.textContent = new Date(selectedDate).toLocaleDateString('ru-RU', {
-          day: 'numeric',
-          month: 'long',
-          weekday: 'long'
-        });
-        schedule.renderSchedule(selectedDate);
-      });
-
-      // Обработчики модальных окон
-      document.getElementById('confirm-booking')?.addEventListener('click', () => {
-        const selectedDate = datePicker.value;
-        schedule.handleConfirmBooking(selectedDate);
-      });
-
-      document.getElementById('cancel-booking')?.addEventListener('click', () => {
-        document.getElementById('booking-modal').classList.add('hidden');
-      });
-
-      document.getElementById('confirm-cancel')?.addEventListener('click', () => {
-        schedule.handleConfirmCancel();
-      });
-
-      document.getElementById('deny-cancel')?.addEventListener('click', () => {
-        document.getElementById('cancel-modal').classList.add('hidden');
-      });
+      // Устанавливаем текущую дату в date-picker
+      const datePicker = document.getElementById('date-picker');
+      const formattedDate = today.toISOString().split('T')[0];
+      datePicker.value = formattedDate;
+      datePicker.min = formattedDate; // Запрещаем выбирать прошедшие даты
     });
   </script>
 </body>

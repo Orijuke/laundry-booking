@@ -9,6 +9,8 @@
 <body>
   <div class="profile-container">
     <h1>Настройки профиля</h1>
+    <div class="user-id" id="user-id-display"></div>
+    
     <form id="profile-form">
       <div class="form-group">
         <label for="name">Ваше имя:</label>
@@ -35,14 +37,14 @@
       </div>
       
       <div class="form-group">
-        <label for="color">Ваш цвет в расписании:</label>
+        <label for="color">Ваш цвет:</label>
         <input type="color" id="color" value="#3498db">
       </div>
       
-      <button type="submit" class="submit-btn button-54">Сохранить профиль</button>
+      <button type="submit" class="submit-btn">Сохранить</button>
     </form>
     
-    <a href="index.html" class="back-link">← Вернуться к расписанию</a>
+    <a href="index.html" class="back-link">📅 Вернуться к расписанию</a>
   </div>
 
   <script src="js/storage.js"></script>

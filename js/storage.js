@@ -2,32 +2,37 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase
 import { getDatabase, ref, set, get, remove } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-database.js";
 
 const firebaseConfig = {
-  databaseURL: "https://laundry-booking-sedova-91k6-default-rtdb.europe-west1.firebasedatabase.app",
+  databaseURL: "https://laundry-booking-sedova-91k6-default-rtdb.europe-west1.firebasedatabase.app"
 };
 
-set(ref(db, 'testConnection'), {
-  message: "Firebase подключен!",
-  timestamp: Date.now()
-}).then(() => console.log("Тестовая запись отправлена"));
-
+// Инициализация Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+// Тестовый запрос (уберите после проверки)
+set(ref(db, 'testConnection'), {
+  message: "Firebase подключен!",
+  timestamp: Date.now()
+})
+.then(() => console.log("Тестовая запись отправлена"))
+.catch((error) => console.error("Ошибка подключения:", error));
+
 class StorageService {
-  // Сохранение пользователя
-  async saveUser(user) {
-    await set(ref(db, `users/${user.id}`), user);
+  constructor() {
+    this.db = db;
   }
 
-  // Получение бронирований на дату
+  async saveUser(user) {
+    await set(ref(this.db, `users/${user.id}`), user);
+  }
+
   async getBookingsForDate(date) {
-    const snapshot = await get(ref(db, `bookings/${date}`));
+    const snapshot = await get(ref(this.db, `bookings/${date}`));
     return snapshot.val() || {};
   }
 
-  // Создание брони
   async saveBooking(date, timeSlot, machine, user) {
-    await set(ref(db, `bookings/${date}/${timeSlot}/${machine}`), {
+    await set(ref(this.db, `bookings/${date}/${timeSlot}/${machine}`), {
       userId: user.id,
       userName: user.name,
       room: user.room,
@@ -36,9 +41,8 @@ class StorageService {
     });
   }
 
-  // Отмена брони
   async cancelBooking(date, timeSlot, machine) {
-    await remove(ref(db, `bookings/${date}/${timeSlot}/${machine}`));
+    await remove(ref(this.db, `bookings/${date}/${timeSlot}/${machine}`));
   }
 }
 

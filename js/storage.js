@@ -5,6 +5,11 @@ const firebaseConfig = {
   databaseURL: "https://laundry-booking-sedova-91k6-default-rtdb.europe-west1.firebasedatabase.app",
 };
 
+set(ref(db, 'testConnection'), {
+  message: "Firebase подключен!",
+  timestamp: Date.now()
+}).then(() => console.log("Тестовая запись отправлена"));
+
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 

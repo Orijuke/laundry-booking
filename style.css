@@ -1,51 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
-
+/* Основные стили */
 :root {
-  --primary-bg: #F5E8DF;
+  --primary-bg: #F5E8DF; /* Светло-персиково-бежевый */
   --text-color: #000;
   --border-width: 3px;
+  --shadow-offset: 2px;
 }
 
-/* Базовые стили */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
   font-family: 'Montserrat', sans-serif;
-  margin: 0;
-  padding: 0;
   background-color: var(--primary-bg);
   color: var(--text-color);
-  line-height: 1.5;
-}
-
-/* Кнопки в стиле button-54 */
-.button-54 {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--text-color);
-  cursor: pointer;
-  border: var(--border-width) solid var(--text-color);
-  padding: 0.5em 1em;
-  background: #fff;
-  box-shadow: 2px 2px 0 0 var(--text-color);
-  position: relative;
-  transition: all 0.1s ease;
-  user-select: none;
-}
-
-.button-54:hover {
-  background-color: #f0f0f0;
-}
-
-.button-54:active {
-  box-shadow: none;
-  top: 2px;
-  left: 2px;
+  line-height: 1.6;
+  min-height: 100vh;
 }
 
 /* Шапка */
@@ -60,8 +34,29 @@ header {
 }
 
 #profile-btn {
-  composes: button-54;
-  font-weight: 700;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-color);
+  cursor: pointer;
+  border: var(--border-width) solid var(--text-color);
+  padding: 0.5em 1em;
+  background: #fff;
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0 0 var(--text-color);
+  position: relative;
+  transition: all 0.1s ease;
+}
+
+#profile-btn:hover {
+  background-color: #f0f0f0;
+}
+
+#profile-btn:active {
+  box-shadow: none;
+  top: var(--shadow-offset);
+  left: var(--shadow-offset);
 }
 
 #current-date {
@@ -122,8 +117,9 @@ main {
 
 .machine-slot {
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
   min-width: 150px;
+  position: relative;
 }
 
 .machine-slot.available {
@@ -138,12 +134,48 @@ main {
 .machine-slot.booked {
   background-color: #fff;
   font-weight: 600;
-  position: relative;
 }
 
 .machine-slot.my-booking:hover {
   outline: var(--border-width) solid var(--text-color);
   outline-offset: -3px;
+}
+
+/* Цветовой пикер */
+.color-picker {
+  margin: 1.5rem 0;
+}
+
+.color-picker p {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+.color-options {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.color-option {
+  width: 30px;
+  height: 30px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.color-option:hover {
+  transform: scale(1.1);
+}
+
+.color-option.active {
+  border-color: var(--text-color);
+  transform: scale(1.1);
+  box-shadow: 0 0 0 2px white;
 }
 
 /* Модальные окна */
@@ -181,6 +213,34 @@ main {
 .button-group {
   display: flex;
   gap: 1rem;
+}
+
+.button-54 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-color);
+  cursor: pointer;
+  border: var(--border-width) solid var(--text-color);
+  padding: 0.5em 1em;
+  background: #fff;
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0 0 var(--text-color);
+  position: relative;
+  transition: all 0.1s ease;
+  flex-grow: 1;
+  text-align: center;
+}
+
+.button-54:hover {
+  background-color: #f0f0f0;
+}
+
+.button-54:active {
+  box-shadow: none;
+  top: var(--shadow-offset);
+  left: var(--shadow-offset);
 }
 
 /* Страница профиля */
@@ -222,9 +282,9 @@ main {
 }
 
 .form-group input[type="color"] {
-  height: 50px;
-  padding: 5px;
-  cursor: pointer;
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .submit-btn {
@@ -232,6 +292,7 @@ main {
   width: 100%;
   padding: 1em;
   font-weight: 700;
+  margin-top: 1rem;
 }
 
 .back-link {
@@ -260,6 +321,11 @@ main {
   #schedule-table th,
   #schedule-table td {
     padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+  
+  .color-options {
+    grid-template-columns: repeat(4, 1fr);
   }
   
   .profile-container {
@@ -269,10 +335,20 @@ main {
   
   .button-group {
     flex-direction: column;
-    gap: 0.5rem;
   }
   
-  .button-54 {
-    width: 100%;
+  .modal-content {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .color-options {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  #schedule-table th,
+  #schedule-table td {
+    padding: 0.5rem;
   }
 }

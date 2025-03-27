@@ -77,8 +77,8 @@ class ScheduleService {
     }
 
     document.getElementById('modal-time').textContent = timeSlot;
-    document.getElementById('modal-machine').textContent = 
-      machine === 'У стены' ? 'у стены' : 'у двери';
+    const machineText = machine === 'У стены' ? 'у стены' : 'у двери';
+    document.getElementById('modal-machine').textContent = machineText;
     document.getElementById('booking-modal').classList.add('visible');
     
     this.selectedSlot = { timeSlot, machine };
@@ -100,8 +100,8 @@ class ScheduleService {
 
   handleCancelBooking(date, timeSlot, machine) {
     document.getElementById('cancel-modal-time').textContent = timeSlot;
-    document.getElementById('cancel-modal-machine').textContent = 
-      machine === 'У стены' ? 'у стены' : 'у двери';
+    const machineText = machine === 'У стены' ? 'у стены' : 'у двери';
+    document.getElementById('cancel-modal-machine').textContent = machineText;
     document.getElementById('cancel-modal').classList.add('visible');
     
     this.cancelSlot = { date, timeSlot, machine };

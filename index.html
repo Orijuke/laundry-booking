@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Подключаем Firebase -->
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
   
@@ -23,17 +23,15 @@
     const app = firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     
-    // Делаем db глобально доступной для других скриптов
+    // Делаем db глобально доступной
     window.db = db;
-
-    // Тест подключения (можно удалить после проверки)
-    db.ref('testConnection').set({
-      message: "Firebase подключен!",
-      timestamp: firebase.database.ServerValue.TIMESTAMP
-    }).then(() => console.log("Тестовая запись отправлена"));
   </script>
 </head>
 <body>
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="loading-spinner"></div>
+  </div>
+
   <header>
     <button id="profile-btn" class="button-54">👤 Профиль</button>
     <h1 id="current-date"></h1>
@@ -79,16 +77,34 @@
     </div>
   </div>
 
+  <!-- Подключаем скрипты -->
   <script src="js/storage.js"></script>
   <script src="js/schedule.js"></script>
   <script src="js/app.js"></script>
 
   <script>
-    // Инициализация текущей даты в заголовке
+    // Инициализация текущей даты
     document.addEventListener('DOMContentLoaded', function() {
       const today = new Date();
       const options = { day: 'numeric', month: 'long', weekday: 'long' };
       document.getElementById('current-date').textContent = today.toLocaleDateString('ru-RU', options);
+      
+      // Устанавливаем минимальную дату (сегодня) и значение по умолчанию
+      const datePicker = document.getElementById('date-picker');
+      const todayISO = today.toISOString().split('T')[0];
+      datePicker.value = todayISO;
+      datePicker.min = todayISO;
+      
+      // Показываем загрузку
+      document.getElementById('loading-overlay').style.display = 'flex';
+      
+      // Инициализируем приложение после загрузки всех скриптов
+      setTimeout(() => {
+        if (window.appInit) {
+          window.appInit();
+        }
+        document.getElementById('loading-overlay').style.display = 'none';
+      }, 500);
     });
   </script>
 </body>

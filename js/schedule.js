@@ -40,8 +40,8 @@ class ScheduleService {
     tableBody.innerHTML = '<tr><td colspan="3" class="loading-row">Загрузка расписания...</td></tr>';
     
     try {
-      const bookings = await this.storage.getBookingsForDate(date);
-      const currentUser = this.storage.getUser();
+      const bookings = await window.storage.getBookingsForDate(date);
+      const currentUser = window.storage.getUser();
       
       tableBody.innerHTML = '';
       
@@ -86,7 +86,7 @@ class ScheduleService {
   }
 
   handleSlotClick(timeSlot, machine) {
-    const currentUser = this.storage.getUser();
+    const currentUser = window.storage.getUser();
     if (!currentUser) {
       if (confirm('Для бронирования нужно создать профиль. Перейти к настройкам?')) {
         window.location.href = 'profile.html';

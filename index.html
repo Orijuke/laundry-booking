@@ -10,8 +10,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+  <!--script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script-->
   
   <script>
     // Инициализация Firebase
@@ -20,11 +20,11 @@
     };
     
     // Инициализируем Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+    //const app = firebase.initializeApp(firebaseConfig);
+    //const db = firebase.database();
     
     // Делаем db глобально доступной
-    window.db = db;
+    //window.db = db;
   </script>
 </head>
 <body>
@@ -78,7 +78,7 @@
   </div>
 
   <!-- Подключаем скрипты -->
-  <script src="js/storage.js"></script>
+  <script src="js/storage.js" type="module"></script>
   <script src="js/schedule.js"></script>
   <script src="js/app.js"></script>
 

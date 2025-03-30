@@ -1,8 +1,11 @@
 // storage.js - полная реализация с исправлениями
 
 // Используем compat-версии для совместимости
-import firebase from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js";
-import "https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js";
+//import * as firebase from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js";
+//import "https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
+import { getDatabase } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-database.js";
+
 
 class StorageService {
   constructor() {
@@ -11,8 +14,8 @@ class StorageService {
       databaseURL: "https://laundry-booking-sedova-91k6-default-rtdb.europe-west1.firebasedatabase.app"
     };
     
-    this.app = firebase.initializeApp(firebaseConfig);
-    this.db = firebase.database();
+    this.app = initializeApp(firebaseConfig);
+    this.db = getDatabase(this.app);
     this.currentUser = null;
     this.loadUserFromLocalStorage();
   }

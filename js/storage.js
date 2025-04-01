@@ -1,15 +1,9 @@
-// storage.js - полная реализация с исправлениями
-
-// Используем compat-версии для совместимости
-//import * as firebase from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js";
-//import "https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js";
+// storage.js - исправленная версия
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
-import { getDatabase } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-database.js";
-
+import { getDatabase, ref, set, get, remove } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-database.js";
 
 class StorageService {
   constructor() {
-    // Инициализация Firebase
     const firebaseConfig = {
       databaseURL: "https://laundry-booking-sedova-91k6-default-rtdb.europe-west1.firebasedatabase.app"
     };
@@ -20,7 +14,6 @@ class StorageService {
     this.loadUserFromLocalStorage();
   }
 
-  // Загрузка пользователя из localStorage
   loadUserFromLocalStorage() {
     const userData = localStorage.getItem('currentUser');
     if (userData) {
@@ -28,7 +21,6 @@ class StorageService {
     }
   }
 
-  // Сохранение пользователя
   async saveUser(user) {
     if (!user.id) {
       user.id = this.generateUserId();
@@ -38,7 +30,7 @@ class StorageService {
     localStorage.setItem('currentUser', JSON.stringify(user));
     
     try {
-      await firebase.database().ref(`users/${user.id}`).set(user);
+      await set(ref(this.db, `users/${user.id}`), user);
       return true;
     } catch (error) {
       console.error('Ошибка сохранения пользователя:', error);
@@ -46,20 +38,17 @@ class StorageService {
     }
   }
 
-  // Получение текущего пользователя
   getUser() {
     return this.currentUser;
   }
 
-  // Генерация ID пользователя
   generateUserId() {
     return 'user_' + Math.random().toString(36).substr(2, 9);
   }
 
-  // Получение бронирований на дату
   async getBookingsForDate(date) {
     try {
-      const snapshot = await firebase.database().ref(`bookings/${date}`).get();
+      const snapshot = await get(ref(this.db, `bookings/${date}`));
       return snapshot.val() || {};
     } catch (error) {
       console.error('Ошибка загрузки бронирований:', error);
@@ -67,10 +56,9 @@ class StorageService {
     }
   }
 
-  // Сохранение бронирования
   async saveBooking(date, timeSlot, machine, user) {
     try {
-      await firebase.database().ref(`bookings/${date}/${timeSlot}/${machine}`).set({
+      await set(ref(this.db, `bookings/${date}/${timeSlot}/${machine}`), {
         userId: user.id,
         userName: user.name,
         room: user.room,
@@ -84,10 +72,9 @@ class StorageService {
     }
   }
 
-  // Отмена бронирования
   async cancelBooking(date, timeSlot, machine) {
     try {
-      await firebase.database().ref(`bookings/${date}/${timeSlot}/${machine}`).remove();
+      await remove(ref(this.db, `bookings/${date}/${timeSlot}/${machine}`));
       return true;
     } catch (error) {
       console.error('Ошибка отмены бронирования:', error);
@@ -96,6 +83,5 @@ class StorageService {
   }
 }
 
-// Создаем экземпляр хранилища и делаем его глобально доступным
 const storage = new StorageService();
 window.storage = storage;

@@ -5,7 +5,7 @@ import { getDatabase, ref, set, get, remove } from "https://www.gstatic.com/fire
 class StorageService {
   constructor() {
     const firebaseConfig = {
-      databaseURL: "https://laundry-booking-sedova-91k6-default-rtdb.europe-west1.firebasedatabase.app"
+      databaseURL: "https://laundry-booking-sedova-91k6-default-rtdb.europe-west1.firebasedatabase.app/"
     };
     
     this.app = initializeApp(firebaseConfig);
